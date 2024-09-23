@@ -1,0 +1,45 @@
+---
+
+### NETWORKS ###
+networks:
+  zbx_net_agent:
+    driver: bridge
+    driver_opts:
+      com.docker.network.enable_ipv6: "false"
+      com.docker.network.bridge.name: "br-zbx-agent"
+
+### SERVICES ###
+services:
+  zabbix-agent:
+    image: zabbix/zabbix-agent:alpine-7.0.3
+    # image: zabbix/zabbix-agent:alpine-7.0-latest
+    container_name: zabbix-agent
+    restart: unless-stopped
+    stop_grace_period: 5s
+    privileged: true
+    pid: "host"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: 128M
+        reservations:
+          cpus: '0.1'
+          memory: 64M
+      mode: global
+    hostname: zabbix-agent
+    env_file:
+      - ./.env
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      # - ./data/etc/:/etc/zabbix/zabbix_agentd.d/
+      # - ./data/modules/:/var/lib/zabbix/modules
+      # - ./data/enc/:/var/lib/zabbix/enc/
+      # - ./data/ssh_keys/:/var/lib/zabbix/ssh_keys/
+    ports:
+      - ${DOCKER_LISTEN_IP}:10050:10050
+    networks:
+      zbx_net_agent:
+        aliases:
+          - zabbix-agent
