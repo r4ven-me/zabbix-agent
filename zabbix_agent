@@ -1,0 +1,7 @@
+# Sudoers file for zabbix-agent 
+
+Cmnd_Alias ZBX_AGENT = \
+    /usr/bin/docker compose -f /opt/zabbix-agent/docker-compose.yml up, \
+    /usr/bin/docker compose -f /opt/zabbix-agent/docker-compose.yml down
+
+zabbix ALL = (:docker) NOPASSWD: ZBX_AGENT

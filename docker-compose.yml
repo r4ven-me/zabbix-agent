@@ -33,6 +33,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
+      - /boot/efi/:/host/boot/efi/:ro
       # - ./data/etc/:/etc/zabbix/zabbix_agentd.d/
       # - ./data/modules/:/var/lib/zabbix/modules
       # - ./data/enc/:/var/lib/zabbix/enc/
